@@ -1,4 +1,4 @@
-#!/bin/ksh93
+#!/bin/bash
 
 d.compile -o libburp_c.a -src burp_api.c -O 0 -librmn rmn
 

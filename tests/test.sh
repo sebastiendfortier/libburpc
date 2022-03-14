@@ -1,4 +1,4 @@
-#!/usr/bin/ksh
+#!/usr/bin/bash
 set -ex
 
 SCRIPT=`readlink -f $0`
