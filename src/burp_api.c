@@ -48,7 +48,7 @@
 #include <sys/time.h>
 #include <syslog.h>
 #include <errno.h>
-#include <rmnlib.h>
+#include <rmn.h>
 #include "burp_api.h"
 
 
