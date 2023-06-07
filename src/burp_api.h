@@ -398,12 +398,6 @@ extern  int        brp_delrpt(BURP_RPT * rpt);
 extern  int        brp_SetOptFloat(char* opt, float val);
 extern  int        brp_SetOptChar (char* opt, char * val);
 extern  float      brp_msngval (void);
-/*
- * burp rpn functions
- */
-extern  int        c_mrfmxl ( int iun );
-extern  int        c_mrfnbr ( int iun );
-extern  int        c_mrbdel ( int *buf, int bkno);
 
 /***************************************************************************
 ***************************************************************************/
