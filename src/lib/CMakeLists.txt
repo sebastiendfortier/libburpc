@@ -1,0 +1,47 @@
+message(STATUS "(EC) Generating burp_c librairie")
+
+set(PROJECT_INCLUDE_FILES burp_api.h declare.h)
+set(MODULE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include)
+#set(PROJECT_MODULE_FILES ${MODULE_DIR}/vgrid_descriptors.mod ${MODULE_DIR}/vgrid_utils.mod)
+
+add_library(${PROJECT_NAME}-static STATIC burp_api.c)
+add_dependencies(${PROJECT_NAME}-static ${PROJECT_NAME}_build_info)
+add_library(${PROJECT_NAME}-shared SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-static>)
+add_dependencies(${PROJECT_NAME}-shared ${PROJECT_NAME}-static ${PROJECT_NAME}_build_info)
+
+set_target_properties(${PROJECT_NAME}-static ${PROJECT_NAME}-shared PROPERTIES
+  VERSION ${PROJECT_VERSION}
+  PUBLIC_HEADER "${PROJECT_INCLUDE_FILES}"
+#  Fortran_MODULE_DIRECTORY ${MODULE_DIR}
+  INTERFACE_COMPILE_DEFINITIONS HAVE_LIBBURPC="${PROJECT_VERSION}"
+  INTERFACE_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${MODULE_DIR}>
+  POSITION_INDEPENDENT_CODE ON
+  OUTPUT_NAME burp_c)
+ 
+target_link_libraries(${PROJECT_NAME}-static rmn::rmn-static)
+target_link_libraries(${PROJECT_NAME}-shared rmn::rmn-shared)
+
+install(TARGETS ${PROJECT_NAME}-static
+  EXPORT ${PROJECT_NAME}-static-targets
+  INCLUDES      DESTINATION include
+  PUBLIC_HEADER DESTINATION include
+  LIBRARY       DESTINATION lib
+  ARCHIVE       DESTINATION lib)
+install(TARGETS ${PROJECT_NAME}-shared
+  EXPORT ${PROJECT_NAME}-shared-targets
+  INCLUDES      DESTINATION include
+  PUBLIC_HEADER DESTINATION include
+  LIBRARY       DESTINATION lib
+  ARCHIVE       DESTINATION lib)
+install(FILES ${PROJECT_MODULE_FILES} DESTINATION include)
+
+if(BUILD_SHARED_LIBS)
+    add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME}-shared)
+else()
+    add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME}-static)
+endif()
+
+# Symbolic link for archive numbered version
+add_custom_command(TARGET ${PROJECT_NAME}-static POST_BUILD
+    COMMAND ln -sfv lib${PROJECT_NAME}.a lib${PROJECT_NAME}_${PROJECT_VERSION}.a)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}_${PROJECT_VERSION}.a DESTINATION lib)

@@ -1,0 +1,16 @@
+NAME       : burp_c
+VERSION    : 
+BUILD      : 
+STATE      :
+DESCRIPTION: C interface for burp
+SUMMARY    : This library allows for encoding/decoding, of burp files
+MAINTAINER : Anthony Chartier - Anthony.Chartier@ec.gc.ca
+URL        : https://gitlab.science.gc.ca/wxobs-libs/libburpc
+
+# Dependencies 
+#    =,<,<=,>,>= : Version rules
+#    ~           : Optional
+
+rmn    >= 20.0.0
+
+
